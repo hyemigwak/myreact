@@ -26,12 +26,12 @@ const Memo = () => {
     }
 
     const getMemo = async() => {
-        const response = await axios.get("http://localhost:5000");
+        const response = await axios.get("http://3.83.142.57:5000");
         setData(response.data);
     }
 
     const submitMemo = () => {
-        axios.post("http://localhost:5000/upload", { name: name, memo: memo })
+        axios.post("http://3.83.142.57:5000/upload", { name: name, memo: memo })
             .then((res) =>{
                 if(res.data === "success"){
                     setInputs({
@@ -51,7 +51,7 @@ const Memo = () => {
     },[]);
 
     const deleteApi = (memo_id) => {
-        axios.delete("http://localhost:5000/delete", {data: {memo_id: memo_id}})
+        axios.delete("http://3.83.142.57:5000/delete", {data: {memo_id: memo_id}})
             .then((res) => {
             if(res.data === "success") {
                 alert("삭제 완료");

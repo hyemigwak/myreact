@@ -26,7 +26,7 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         //id, password 서버로 보내고 응답 오면 router로 메모로 옮긴다.
-        axios.post("http://localhost:5000/login",
+        axios.post("http://3.83.142.57:5000/login",
             { email: email, password: password })
             .then((res) =>{
                 if(res.data.success){

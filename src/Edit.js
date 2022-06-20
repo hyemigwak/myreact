@@ -10,7 +10,7 @@ const Edit = () => {
     const [detailMemo, setDetailMemo] = useState({});
 
     const getDetailMemo = async () => {
-        const response = await axios.get(`http://localhost:5000/detail/${memoId}`);
+        const response = await axios.get(`http://3.83.142.57:5000/detail/${memoId}`);
         setDetailMemo(response.data.memoData);
     }
 
@@ -23,7 +23,7 @@ const Edit = () => {
     };
 
     const updateMemo = () => {
-        axios.post("http://localhost:5000/edit", {memo_id: detailMemo.memo_id, name: detailMemo.name, memo: detailMemo.memo})
+        axios.post("http://3.83.142.57:5000/edit", {memo_id: detailMemo.memo_id, name: detailMemo.name, memo: detailMemo.memo})
             .then((res) => {
                 console.log(res,"res");
                 if(res.data === "success") {

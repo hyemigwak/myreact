@@ -29,7 +29,7 @@ const ImageUpload = () => {
         formData.append("file", files);
         const response = await axios({
             method: "post",
-            url: "http://localhost:5000/image",
+            url: "http://3.83.142.57:5000/image",
             data: formData,
             headers: {
                 "Content-Type": "multipart/form-data"
