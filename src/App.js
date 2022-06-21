@@ -9,10 +9,10 @@ import Signup from "./Signup";
 function App() {
   return (
       <Routes>
-        <Route exact path="/" element={<Memo/>}/>
+        <Route exact path="/memo" element={<Memo/>}/>
         <Route exact path="/edit/:memo_id" element={<Edit/>}/>
         <Route exact path="/image" element={<ImageUpload/>}/>
-        <Route exact path="/login" element={<Login/>}/>
+        <Route exact path="/" element={<Login/>}/>
         <Route exact path="/signup" element={<Signup/>}/>
       </Routes>
   );

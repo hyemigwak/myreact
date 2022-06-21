@@ -30,7 +30,7 @@ const Login = () => {
             { email: email, password: password })
             .then((res) =>{
                 if(res.data.success){
-                    navigate("/");
+                    navigate("/memo");
                     alert(`${res.data.email}님 안녕하세요!`);
                 } else {
                     alert(`${res.data.errorMessages}`);
@@ -59,6 +59,7 @@ const Login = () => {
                 />
                 <button type="submit">로그인</button>
             </form>
+            <button onClick={()=>navigate("/signup")}>회원가입 하러가기</button>
         </div>
     );
 };
