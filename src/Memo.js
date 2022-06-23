@@ -4,12 +4,14 @@ import './App.css';
 import axios from 'axios';
 import dayjs from "dayjs";
 import styled from "styled-components";
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+
 
 
 const Memo = () => {
 
     const navigate = useNavigate();
-    const [data, setData] = useState([]);
+    const queryClient = useQueryClient();
     const [inputs, setInputs] = useState({
         name: '',
         memo: ''
@@ -25,38 +27,60 @@ const Memo = () => {
         })
     }
 
-    const getMemo = async() => {
-        const response = await axios.get("http://3.83.142.57:5000");
-        setData(response.data);
+    const getMemo = async () => {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}`);
+        return response.data;
     }
+
+    const addMemo = async (memoData) => {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, memoData);
+        return response.data
+    }
+
+    const deleteMemo = async (data) => {
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/delete`, {
+            data: data
+        });
+        return response.data
+    }
+
+
+
+    const { data } = useQuery("memo", getMemo, {
+        retry: 1,
+        staleTime: 5000
+    });
+
+    const addMutation = useMutation("memo", addMemo);
+    const deleteMutation = useMutation("memo", deleteMemo);
 
     const submitMemo = () => {
-        axios.post("http://3.83.142.57:5000/upload", { name: name, memo: memo })
-            .then((res) =>{
-                if(res.data === "success"){
-                    setInputs({
-                        name: '',
-                        memo: ''
-                    })
-                    getMemo();
-                } else {
-                    alert("등록 실패!");
-                }
-            })
-            .catch((err) => console.log(err))
+        addMutation.mutate({name: name, memo: memo}, {
+            onSuccess: () => {
+                setInputs({
+                    name: '',
+                    memo: ''
+                })
+                return queryClient.invalidateQueries("memo");
+            },
+            onError: () => {
+                alert("등록 실패!");
+            }
+        }
+        )
     }
 
-    useEffect(()=>{
-        getMemo();
-    },[]);
 
-    const deleteApi = (memo_id) => {
-        axios.delete("http://3.83.142.57:5000/delete", {data: {memo_id: memo_id}})
-            .then((res) => {
-            if(res.data === "success") {
-                alert("삭제 완료");
-                getMemo();
-            } else {
+    const deleteMemoHanlder = (memoId) => {
+        let deleteData = {
+            memo_id: memoId
+        };
+
+        deleteMutation.mutate(deleteData, {
+            onSuccess: () => {
+                return queryClient.invalidateQueries("memo");
+            },
+            onError: () => {
                 alert("삭제 실패");
             }
         })
@@ -78,15 +102,15 @@ const Memo = () => {
                 </thead>
                 <tbody>
                 {
-                    data.map((datum) => {
+                    data?.map((datum) => {
                         return (
                             <tr key={datum.memo_id}>
                                 <td>{datum.name}</td>
                                 <td>{datum.memo}</td>
                                 <td>{dayjs(datum.created_at).format("YYYY-MM-DD HH:mm")}</td>
                                 <td>{dayjs(datum.updated_at).format("YYYY-MM-DD HH:mm")}</td>
-                                <td style={{cursor:"pointer"}} onClick={() => deleteApi(datum.memo_id)}>삭제</td>
-                                <td style={{cursor:"pointer"}} onClick={()=> navigate(`edit/${datum.memo_id}`)}>수정</td>
+                                <td style={{cursor:"pointer"}} onClick={() => deleteMemoHanlder(datum.memo_id)}>삭제</td>
+                                <td style={{cursor:"pointer"}} onClick={()=> navigate(`/edit/${datum.memo_id}`)}>수정</td>
                             </tr>
                         )
                     })

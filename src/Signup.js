@@ -37,7 +37,7 @@ const Signup = () => {
         }
 
         //id, password 서버로 보내기
-        axios.post("http://3.83.142.57:5000/signup",
+        axios.post(`${process.env.REACT_APP_API_URL}/signup`,
             { email: email, password: password })
             .then((res) =>{
                 if(res.data.success === true){
