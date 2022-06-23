@@ -1,12 +1,11 @@
 import React, {useState} from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
 
     const navigate = useNavigate();
-
     const { register, handleSubmit } = useForm();
 
 
