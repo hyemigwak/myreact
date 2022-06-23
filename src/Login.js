@@ -1,33 +1,18 @@
 import React, {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-
-
+import { useForm } from "react-hook-form";
 
 const Login = () => {
 
     const navigate = useNavigate();
 
-    const [inputs, setInputs] = useState({
-        email: '',
-        password: '',
-    });
+    const { register, handleSubmit } = useForm();
 
-    const { email, password } = inputs;
 
-    const handleChange = (e) => {
-        const { value, name } = e.target;
-        setInputs({
-            ...inputs,
-            [name]: value
-        })
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        //id, password 서버로 보내고 응답 오면 router로 메모로 옮긴다.
+    const onSubmit = (data) => {
         axios.post(`${process.env.REACT_APP_API_URL}/login`,
-            { email: email, password: password })
+            { email: data.email, password: data.password })
             .then((res) =>{
                 if(res.data.success){
                     navigate("/memo");
@@ -39,22 +24,22 @@ const Login = () => {
             .catch((err) => console.log(err))
     };
 
+
+
     return (
         <div style={{marginLeft:'20px'}}>
             <h2>로그인</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <input
                     type="text"
                     name="email"
-                    value={email}
-                    onChange={handleChange}
+                    {...register("email", { required: true })}
                     placeholder={"email"}
                 />
                 <input
                     type="password"
                     name="password"
-                    value={password}
-                    onChange={handleChange}
+                    {...register("password", { required: true })}
                     placeholder={"password"}
                 />
                 <button type="submit">로그인</button>

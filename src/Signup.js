@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from 'axios';
+import { useForm } from "react-hook-form";
+
 
 const Signup = () => {
 
     const navigate = useNavigate();
+    const { register, handleSubmit } = useForm();
 
     const [inputs, setInputs] = useState({
         email: '',
@@ -23,8 +26,9 @@ const Signup = () => {
         })
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const onSubmit = (data) => {
+
+        const { password, passwordCheck, email } = data;
 
         if(password !== passwordCheck) {
             alert("비밀번호가 일치하지 않습니다");
@@ -41,7 +45,7 @@ const Signup = () => {
             { email: email, password: password })
             .then((res) =>{
                 if(res.data.success === true){
-                    navigate("/login");
+                    navigate("/");
                 } else {
                     alert(`${res.data.errorMessages}`);
                 }
@@ -52,30 +56,24 @@ const Signup = () => {
     return (
         <div style={{marginLeft:'20px'}}>
             <h2>회원가입</h2>
-            <SignupForm onSubmit={handleSubmit}>
+            <SignupForm onSubmit={handleSubmit(onSubmit)}>
                 <input
                     type="text"
                     name="email"
-                    value={email}
-                    onChange={handleChange}
+                    {...register("email", { required: true})}
                     placeholder={"email"}
-                    required
                 />
                 <input
                     type="password"
                     name="password"
-                    value={password}
-                    onChange={handleChange}
+                    {...register("password", { required: true})}
                     placeholder={"password"}
-                    required
                 />
                 <input
                     type="password"
                     name="passwordCheck"
-                    value={passwordCheck}
-                    onChange={handleChange}
+                    {...register("passwordCheck", { required: true})}
                     placeholder={"password를 한번 더 입력"}
-                    required
                 />
                 <button type="submit">회원 가입</button>
             </SignupForm>
