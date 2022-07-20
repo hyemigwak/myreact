@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from 'axios';
 import { useForm } from "react-hook-form";
+import { Input } from "../components/Input";
 
 
 const Signup = () => {
@@ -42,23 +43,20 @@ const Signup = () => {
         <div style={{marginLeft:'20px'}}>
             <h2>회원가입</h2>
             <SignupForm onSubmit={handleSubmit(onSubmit)}>
-                <input
-                    type="text"
-                    name="email"
-                    {...register("email", { required: true})}
+                <Input
+                    type={"text"}
                     placeholder={"email"}
+                    register={{...register("email", { required: true })}}
                 />
-                <input
-                    type="password"
-                    name="password"
-                    {...register("password", { required: true})}
+                <Input
+                    type={"password"}
                     placeholder={"password"}
+                    register={{...register("password", { required: true })}}
                 />
-                <input
-                    type="password"
-                    name="passwordCheck"
-                    {...register("passwordCheck", { required: true})}
+                <Input
+                    type={"password"}
                     placeholder={"password를 한번 더 입력"}
+                    register={{...register("passwordCheck", { required: true })}}
                 />
                 <button type="submit">회원 가입</button>
             </SignupForm>

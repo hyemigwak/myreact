@@ -11,6 +11,8 @@ const Edit = () => {
     const memoId = params.memo_id;
     const [detailMemo, setDetailMemo] = useState({});
 
+    const token = localStorage.getItem("token");
+
     const getDetailMemo = async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/detail/${memoId}`);
         setDetailMemo(response.data.memoData);
@@ -18,7 +20,11 @@ const Edit = () => {
     }
 
     const updateDetailMemo = async (editData) => {
-        const response = axios.post(`${process.env.REACT_APP_API_URL}/edit`, editData);
+        const response = axios.post(`${process.env.REACT_APP_API_URL}/edit`, editData, {
+            headers: {
+                token: token
+            }
+        });
         return response.data;
     };
 
@@ -39,7 +45,9 @@ const Edit = () => {
                 navigate("/memo");
                 return queryClient.invalidateQueries("memo");
             },
-            onError: () => {alert("수정 실패!")}
+            onError: (error) => {
+                console.log(error,"error");
+            }
         });
     }
 
