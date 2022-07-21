@@ -14,7 +14,7 @@ const Login = () => {
 
 
     const onSubmit = (data) => {
-        axios.post(`${process.env.REACT_APP_API_URL}/login`,
+        axios.get(`${process.env.REACT_APP_API_URL}/login`,
             { email: data.email, password: data.password })
             .then((res) =>{
                 localStorage.setItem("token", res.data.token);
